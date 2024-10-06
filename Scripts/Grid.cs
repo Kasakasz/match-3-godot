@@ -26,11 +26,11 @@ public partial class Grid : Node2D
     public override void _Ready() {
 
         GD.Randomize();
-        grid = make2dArray();
-        spawnPieces();
+        grid = Make2dArray();
+        SpawnPieces();
     }
 
-    private List<List<Block>> make2dArray() {
+    private List<List<Block>> Make2dArray() {
         List<List<Block>> initialList = new();
         for (int i = 0; i < width; i++) {
             initialList.Add(new List<Block>());
@@ -42,31 +42,31 @@ public partial class Grid : Node2D
         return initialList;
     }
 
-    private Vector2 grid2pixel(int column, int row)
+    private Vector2 Grid2pixel(int column, int row)
     {
         int newx = x_start + offset * column;
         int newy = y_start + (-offset) * row;
         return new Vector2(newx, newy);
     }
 
-    private void spawnPieces() {
+    private void SpawnPieces() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 int random = new RandomNumberGenerator().RandiRange(0, possiblePieces.Count - 1);
                 Block piece = possiblePieces.ElementAt(random).Instantiate() as Block;
-                while (matchAt(i, j, piece.colour))
+                while (MatchAt(i, j, piece.colour))
                 {
                     random = new RandomNumberGenerator().RandiRange(0, possiblePieces.Count - 1);
                     piece = possiblePieces.ElementAt(random).Instantiate() as Block;
                 }
                 AddChild(piece);
-                piece.Position = grid2pixel(i, j);
+                piece.Position = Grid2pixel(i, j);
                 grid.ElementAt(i).Insert(j, piece);
             }
         }
     }
 
-    private Boolean matchAt(int column, int row, String colour) {
+    private Boolean MatchAt(int column, int row, String colour) {
 
         if (row > 1) {
             Block oneBelow = grid.ElementAt(column).ElementAt(row - 1);
