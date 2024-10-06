@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkn4wlv40j5tg"]
+
+[ext_resource type="PackedScene" uid="uid://dg7kv2yefbob3" path="res://blocks/block.tscn" id="1_l0i4t"]
+[ext_resource type="Texture2D" uid="uid://57w5auxpn50e" path="res://art/indygo.png" id="2_hg1b6"]
+
+[node name="Block" instance=ExtResource("1_l0i4t")]
+colour = "indyk"
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_hg1b6")
