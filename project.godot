@@ -11,13 +11,15 @@ config_version=5
 [application]
 
 config/name="match 3 diamonds"
-run/main_scene="res://scenes/FirstMap.tscn"
+run/main_scene="res://scenes/Menu.tscn"
 config/features=PackedStringArray("4.3", "C#", "Mobile")
 config/icon="res://icon.svg"
 
 [display]
 
-window/stretch/mode="viewport"
+window/size/viewport_width=528
+window/size/viewport_height=925
+window/stretch/mode="canvas_items"
 window/handheld/orientation=1
 
 [dotnet]
