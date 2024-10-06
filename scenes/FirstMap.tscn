@@ -1,52 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://cm0i7mfie8uxw"]
+[gd_scene load_steps=4 format=3 uid="uid://cm0i7mfie8uxw"]
 
+[ext_resource type="Script" path="res://Scripts/FirstMap.cs" id="1_chh2o"]
 [ext_resource type="Texture2D" uid="uid://dm4yh2dxktou1" path="res://art/forest.png" id="1_qxmv3"]
-[ext_resource type="Texture2D" uid="uid://b2qnn66lwx0n0" path="res://art/blue.png" id="2_ic78o"]
-[ext_resource type="Shape2D" uid="uid://c01dqtxpmimnd" path="res://shapes/rectangle.tres" id="2_qyft5"]
-[ext_resource type="Texture2D" uid="uid://cwi37dthhomhr" path="res://art/red2.png" id="3_ts3nm"]
-[ext_resource type="Texture2D" uid="uid://cqvngy35a38os" path="res://art/yellow.png" id="4_4m7yw"]
 [ext_resource type="Script" path="res://Scripts/Grid.cs" id="6_kyvx0"]
 
 [node name="FirstMap" type="Node2D"]
-
-[node name="StaticBody2Dblue" type="StaticBody2D" parent="."]
-visible = false
-position = Vector2(60, 60)
-
-[node name="block" type="CollisionShape2D" parent="StaticBody2Dblue"]
-shape = ExtResource("2_qyft5")
-debug_color = Color(0.327039, 0.568982, 0.699327, 0.42)
-
-[node name="Sprite2DBlue" type="Sprite2D" parent="StaticBody2Dblue/block"]
-position = Vector2(-8.34465e-07, 0)
-scale = Vector2(0.055788, 0.0318725)
-texture = ExtResource("2_ic78o")
-
-[node name="StaticBody2Dred" type="StaticBody2D" parent="."]
-visible = false
-position = Vector2(20, 20)
-
-[node name="block" type="CollisionShape2D" parent="StaticBody2Dred"]
-shape = ExtResource("2_qyft5")
-debug_color = Color(0.327039, 0.568982, 0.699327, 0.42)
-
-[node name="Sprite2DRed" type="Sprite2D" parent="StaticBody2Dred/block"]
-position = Vector2(-8.34465e-07, 0)
-scale = Vector2(0.055788, 0.0318725)
-texture = ExtResource("3_ts3nm")
-
-[node name="StaticBody2Dyellow" type="StaticBody2D" parent="."]
-visible = false
-position = Vector2(40, 40)
-
-[node name="block" type="CollisionShape2D" parent="StaticBody2Dyellow"]
-shape = ExtResource("2_qyft5")
-debug_color = Color(0.327039, 0.568982, 0.699327, 0.42)
-
-[node name="Sprite2D" type="Sprite2D" parent="StaticBody2Dyellow/block"]
-position = Vector2(-8.34465e-07, 0)
-scale = Vector2(0.055788, 0.0318725)
-texture = ExtResource("4_4m7yw")
+script = ExtResource("1_chh2o")
 
 [node name="background" type="TextureRect" parent="."]
 offset_right = 40.0
@@ -56,7 +15,16 @@ texture = ExtResource("1_qxmv3")
 [node name="Grid" type="Node2D" parent="."]
 script = ExtResource("6_kyvx0")
 width = 10
-height = 12
-x_start = 64
-y_start = 550
+height = 14
+x_start = 70
+y_start = 800
 offset = 40
+
+[node name="Button" type="Button" parent="."]
+offset_left = 34.0
+offset_top = 34.0
+offset_right = 86.0
+offset_bottom = 70.0
+text = "End Game"
+
+[connection signal="pressed" from="Button" to="." method="EndGameButtonClicked"]

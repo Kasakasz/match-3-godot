@@ -8,4 +8,3 @@ List of things to do in this project
 6) counting points
 7) new blocks fall from top
 8) add failure condition - no more moves
-9) button to go back from play scene
