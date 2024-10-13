@@ -94,5 +94,29 @@ public partial class Grid : Node2D
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                MoveDown(i, j);
+            }
+        }
+    }
+
+    private void MoveDown(int column, int row) {
+        GD.Print("column = " + column + " row = " + row);
+
+        if (row > 0) {
+            Block oneBelow = grid.ElementAt(column).ElementAt(row - 1);
+            if (oneBelow != null) {
+                ProcessGravity(grid.ElementAt(column).ElementAt(row),
+                column, row
+                );
+            }
+        }
+    }
+
+    private void ProcessGravity(Block piece, int column, int row) {
+        Vector2 currentPos = piece.Position;
+        piece.Position = Grid2pixel(column, row);
+        grid.ElementAt(column).Insert(row, piece);
     }
 }
