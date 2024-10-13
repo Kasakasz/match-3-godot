@@ -1,10 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://jh48e76ggr3l"]
 
 [ext_resource type="PackedScene" uid="uid://dg7kv2yefbob3" path="res://blocks/block.tscn" id="1_48pyp"]
-[ext_resource type="Texture2D" uid="uid://c3y3rqe7kbhgf" path="res://art/green.png" id="2_4jo8v"]
+[ext_resource type="Texture2D" uid="uid://vwo3744u2hoq" path="res://art/dgreen.png" id="2_2vpn0"]
 
 [node name="Block" instance=ExtResource("1_48pyp")]
 colour = "green"
 
 [node name="Sprite2D" parent="." index="0"]
-texture = ExtResource("2_4jo8v")
+scale = Vector2(0.18, 0.19)
+texture = ExtResource("2_2vpn0")

@@ -97,17 +97,28 @@ public partial class Grid : Node2D
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 MoveDown(i, j);
+                
             }
+            
         }
+        
+        RemoveChild(grid.ElementAt(0).ElementAt(0));
+        grid.ElementAt(0).RemoveAt(0);
+        RespawnBlock(0);
     }
 
     private void MoveDown(int column, int row) {
-        GD.Print("column = " + column + " row = " + row);
 
         if (row > 0) {
+            GD.Print("row = " + row + " column = " + column);
+            GD.Print("column  " + grid.ElementAt(column));
+            GD.Print("row size" + grid.ElementAt(column).ElementAt(row));
+            Block currentPiece = grid.ElementAt(column).ElementAt(row);
+            GD.Print("not failed");
             Block oneBelow = grid.ElementAt(column).ElementAt(row - 1);
-            if (oneBelow != null) {
-                ProcessGravity(grid.ElementAt(column).ElementAt(row),
+            if (oneBelow == null && currentPiece != null) {
+                GD.Print("processing gravity for row = " + row + " column = " + column);
+                ProcessGravity(currentPiece,
                 column, row
                 );
             }
@@ -115,8 +126,21 @@ public partial class Grid : Node2D
     }
 
     private void ProcessGravity(Block piece, int column, int row) {
-        Vector2 currentPos = piece.Position;
+        GD.Print(" column = " + column + " row " + row + " piece = " + piece);
         piece.Position = Grid2pixel(column, row);
-        grid.ElementAt(column).Insert(row, piece);
+        grid.ElementAt(column).Insert(row - 1, piece);
+    }
+
+    private void RespawnBlock(int column) {
+        int row = height -1;
+        int random = new RandomNumberGenerator().RandiRange(0, possiblePieces.Count - 1);
+        Block piece = possiblePieces.ElementAt(random).Instantiate() as Block;
+        while (MatchAt(column, row, piece.colour))
+        {
+            random = new RandomNumberGenerator().RandiRange(0, possiblePieces.Count - 1);
+            piece = possiblePieces.ElementAt(random).Instantiate() as Block;
+        }
+        grid.ElementAt(column).Insert(height -1, piece);
+        AddChild(piece);
     }
 }
