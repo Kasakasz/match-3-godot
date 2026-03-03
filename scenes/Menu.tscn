@@ -13,23 +13,83 @@ offset_bottom = 925.0
 texture = ExtResource("1_dwhkn")
 expand_mode = 4
 
-[node name="PlayButton" type="Button" parent="."]
+[node name="TitleLabel" type="Label" parent="."]
+offset_left = 100.0
+offset_top = 80.0
+offset_right = 430.0
+offset_bottom = 150.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 36
+text = "Match 3 Diamonds"
+horizontal_alignment = 1
+
+[node name="ModeLabel" type="Label" parent="."]
+offset_left = 150.0
+offset_top = 200.0
+offset_right = 380.0
+offset_bottom = 240.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Select Game Mode"
+horizontal_alignment = 1
+
+[node name="PlayEndless" type="Button" parent="."]
 offset_left = 138.0
-offset_top = 478.0
+offset_top = 260.0
 offset_right = 396.0
-offset_bottom = 533.0
-text = "Play"
+offset_bottom = 315.0
+text = "Endless"
+
+[node name="PlayMoves10" type="Button" parent="."]
+offset_left = 138.0
+offset_top = 330.0
+offset_right = 396.0
+offset_bottom = 385.0
+text = "10 Moves"
+
+[node name="PlayMoves20" type="Button" parent="."]
+offset_left = 138.0
+offset_top = 400.0
+offset_right = 396.0
+offset_bottom = 455.0
+text = "20 Moves"
+
+[node name="PlayMoves50" type="Button" parent="."]
+offset_left = 138.0
+offset_top = 470.0
+offset_right = 396.0
+offset_bottom = 525.0
+text = "50 Moves"
+
+[node name="PlayTime60" type="Button" parent="."]
+offset_left = 138.0
+offset_top = 540.0
+offset_right = 396.0
+offset_bottom = 595.0
+text = "60 Seconds"
+
+[node name="HighScoresButton" type="Button" parent="."]
+offset_left = 138.0
+offset_top = 610.0
+offset_right = 396.0
+offset_bottom = 665.0
+text = "High Scores"
 
 [node name="ExitButton" type="Button" parent="."]
 offset_left = 137.0
-offset_top = 744.0
+offset_top = 680.0
 offset_right = 395.0
-offset_bottom = 799.0
+offset_bottom = 735.0
 text = "Exit"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_7opmp")
 autoplay = true
 
-[connection signal="pressed" from="PlayButton" to="." method="PlayButtonPressed"]
+[connection signal="pressed" from="PlayEndless" to="." method="PlayEndlessPressed"]
+[connection signal="pressed" from="PlayMoves10" to="." method="PlayMoves10Pressed"]
+[connection signal="pressed" from="PlayMoves20" to="." method="PlayMoves20Pressed"]
+[connection signal="pressed" from="PlayMoves50" to="." method="PlayMoves50Pressed"]
+[connection signal="pressed" from="PlayTime60" to="." method="PlayTime60Pressed"]
+[connection signal="pressed" from="HighScoresButton" to="." method="HighScoresButtonPressed"]
 [connection signal="pressed" from="ExitButton" to="." method="QuitButtonPressed"]
