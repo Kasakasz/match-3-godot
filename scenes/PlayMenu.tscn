@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://cxh1qy2l5wm6j"]
+
+[ext_resource type="Texture2D" uid="uid://btjg68vgvrqe7" path="res://art/backgroundMenu.jpg" id="1_bg"]
+[ext_resource type="Script" path="res://Scripts/PlayMenu.cs" id="1_script"]
+
+[node name="PlayMenu" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 528.0
+offset_bottom = 925.0
+texture = ExtResource("1_bg")
+expand_mode = 4
+
+[node name="TitleLabel" type="Label" parent="."]
+offset_left = 100.0
+offset_top = 80.0
+offset_right = 430.0
+offset_bottom = 150.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "Select Game Mode"
+horizontal_alignment = 1
+
+[node name="PlayEndless" type="Button" parent="."]
+offset_left = 138.0
+offset_top = 200.0
+offset_right = 396.0
+offset_bottom = 255.0
+text = "Endless"
+
+[node name="PlayMoves10" type="Button" parent="."]
+offset_left = 138.0
+offset_top = 270.0
+offset_right = 396.0
+offset_bottom = 325.0
+text = "10 Moves"
+
+[node name="PlayMoves20" type="Button" parent="."]
+offset_left = 138.0
+offset_top = 340.0
+offset_right = 396.0
+offset_bottom = 395.0
+text = "20 Moves"
+
+[node name="PlayMoves50" type="Button" parent="."]
+offset_left = 138.0
+offset_top = 410.0
+offset_right = 396.0
+offset_bottom = 465.0
+text = "50 Moves"
+
+[node name="PlayTime60" type="Button" parent="."]
+offset_left = 138.0
+offset_top = 480.0
+offset_right = 396.0
+offset_bottom = 535.0
+text = "60 Seconds"
+
+[node name="BackButton" type="Button" parent="."]
+offset_left = 138.0
+offset_top = 600.0
+offset_right = 396.0
+offset_bottom = 655.0
+text = "Back"
+
+[connection signal="pressed" from="PlayEndless" to="." method="PlayEndlessPressed"]
+[connection signal="pressed" from="PlayMoves10" to="." method="PlayMoves10Pressed"]
+[connection signal="pressed" from="PlayMoves20" to="." method="PlayMoves20Pressed"]
+[connection signal="pressed" from="PlayMoves50" to="." method="PlayMoves50Pressed"]
+[connection signal="pressed" from="PlayTime60" to="." method="PlayTime60Pressed"]
+[connection signal="pressed" from="BackButton" to="." method="BackButtonPressed"]

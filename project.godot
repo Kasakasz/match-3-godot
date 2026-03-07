@@ -18,11 +18,11 @@ config/name="match 3 diamonds"
 run/main_scene="res://scenes/Menu.tscn"
 config/features=PackedStringArray("4.6", "C#", "Mobile")
 boot_splash/image="res://art/forest.png"
-config/icon="res://icon.svg"
 
 [autoload]
 
 HighScoreManager="*res://Scripts/HighScoreManager.cs"
+MusicManager="*res://Scripts/MusicManager.cs"
 
 [display]
 

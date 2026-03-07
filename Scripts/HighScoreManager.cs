@@ -6,7 +6,7 @@ using System.Text.Json;
 
 public partial class HighScoreManager : Node
 {
-	private const int MaxScoresPerMode = 5;
+	private const int MaxScoresPerMode = 10;
 	private Dictionary<GameMode, List<int>> highScores = new();
 	private string savePath = "user://highscores.json";
 

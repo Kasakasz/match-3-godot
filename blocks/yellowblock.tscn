@@ -7,5 +7,5 @@
 colour = "yellow"
 
 [node name="Sprite2D" parent="." index="0"]
-scale = Vector2(0.18, 0.19)
+scale = Vector2(0.25, 0.26)
 texture = ExtResource("2_blmsp")

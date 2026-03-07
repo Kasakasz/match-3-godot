@@ -8,6 +8,11 @@ public partial class FirstMap : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		MusicManager musicManager = GetNode<MusicManager>("/root/MusicManager");
+		if (musicManager != null) {
+			musicManager.StopMusic();
+		}
+		
 		grid = GetNode<Grid>("Grid");
 		if (grid != null) {
 			grid.gameMode = Menu.SelectedMode;
@@ -21,6 +26,11 @@ public partial class FirstMap : Node2D
 	}
 
 	public void EndGameButtonClicked() {
+		MusicManager musicManager = GetNode<MusicManager>("/root/MusicManager");
+		if (musicManager != null) {
+			musicManager.PlayMusic();
+		}
+		
 		String path = "res://scenes/Menu.tscn";
 		PackedScene preparedScene = GD.Load<PackedScene>(path);
 		GetTree().ChangeSceneToPacked(preparedScene);

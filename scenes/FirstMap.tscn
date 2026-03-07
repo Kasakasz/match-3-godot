@@ -14,11 +14,11 @@ texture = ExtResource("1_qxmv3")
 
 [node name="Grid" type="Node2D" parent="."]
 script = ExtResource("6_kyvx0")
-width = 10
-height = 14
-x_start = 70
-y_start = 800
-offset = 40
+width = 7
+height = 10
+x_start = 72
+y_start = 700
+offset = 55
 
 [node name="Button" type="Button" parent="."]
 offset_left = 34.0

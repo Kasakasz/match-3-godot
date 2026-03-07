@@ -15,6 +15,12 @@ public partial class Menu : Node2D
 	{
 	}
 
+	public void PlayButtonPressed() {
+		String path = "res://scenes/PlayMenu.tscn";
+		PackedScene preparedScene = GD.Load<PackedScene>(path);
+		GetTree().ChangeSceneToPacked(preparedScene);
+	}
+
 	public void QuitButtonPressed() {
 		GetTree().Quit();
 	}
@@ -46,6 +52,12 @@ public partial class Menu : Node2D
 
 	public void HighScoresButtonPressed() {
 		String path = "res://scenes/HighScores.tscn";
+		PackedScene preparedScene = GD.Load<PackedScene>(path);
+		GetTree().ChangeSceneToPacked(preparedScene);
+	}
+
+	public void SettingsButtonPressed() {
+		String path = "res://scenes/SettingsMenu.tscn";
 		PackedScene preparedScene = GD.Load<PackedScene>(path);
 		GetTree().ChangeSceneToPacked(preparedScene);
 	}

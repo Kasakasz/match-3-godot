@@ -34,22 +34,14 @@ public partial class Grid : Node2D
 	private Timer gameTimer;
 	private Control gameOverPanel;
 	private Dictionary<string, Texture2D> gemTextures = new();
-
-	public List<PackedScene> possiblePieces = new()
-	{
-		GD.Load<PackedScene>("res://blocks/blueblock.tscn"),
-		GD.Load<PackedScene>("res://blocks/redblock.tscn"),
-		GD.Load<PackedScene>("res://blocks/yellowblock.tscn"),
-		GD.Load<PackedScene>("res://blocks/brownblock.tscn"),
-		GD.Load<PackedScene>("res://blocks/greenblock.tscn"),
-		GD.Load<PackedScene>("res://blocks/indykblock.tscn"),
-	};
+	private List<PackedScene> possiblePieces = new();
 
 	private List<List<Block>> grid = new();
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 
 		GD.Randomize();
+		LoadPossiblePieces();
 		grid = Make2dArray();
 		LoadTextures();
 		SpawnPieces();
@@ -64,6 +56,18 @@ public partial class Grid : Node2D
 	}
 
 	public void InitializeGame() {
+		int gridWidth = width * offset;
+		int viewportWidth = (int)GetViewport().GetVisibleRect().Size.X;
+		x_start = (viewportWidth - gridWidth) / 2;
+		
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				if (grid[i][j] != null) {
+					grid[i][j].Position = Grid2pixel(i, j);
+				}
+			}
+		}
+		
 		InitializeGameMode();
 	}
 
@@ -167,10 +171,22 @@ public partial class Grid : Node2D
 	private void LoadTextures() {
 		gemTextures["blue"] = GD.Load<Texture2D>("res://art/dblue.png");
 		gemTextures["red"] = GD.Load<Texture2D>("res://art/dred.png");
+		gemTextures["orange"] = GD.Load<Texture2D>("res://art/dorange.png");
 		gemTextures["yellow"] = GD.Load<Texture2D>("res://art/dyellow.png");
-		gemTextures["brown"] = GD.Load<Texture2D>("res://art/dorange.png");
 		gemTextures["green"] = GD.Load<Texture2D>("res://art/dgreen.png");
 		gemTextures["indyk"] = GD.Load<Texture2D>("res://art/dpurple.png");
+	}
+
+	private void LoadPossiblePieces() {
+		possiblePieces = new List<PackedScene>
+		{
+			GD.Load<PackedScene>("res://blocks/blueblock.tscn"),
+			GD.Load<PackedScene>("res://blocks/redblock.tscn"),
+			GD.Load<PackedScene>("res://blocks/orangeblock.tscn"),
+			GD.Load<PackedScene>("res://blocks/yellowblock.tscn"),
+			GD.Load<PackedScene>("res://blocks/greenblock.tscn"),
+			GD.Load<PackedScene>("res://blocks/indykblock.tscn"),
+		};
 	}
 
 	private List<List<Block>> Make2dArray() {
@@ -197,6 +213,9 @@ public partial class Grid : Node2D
 			for (int j = 0; j < height; j++) {
 				int random = new RandomNumberGenerator().RandiRange(0, possiblePieces.Count - 1);
 				Block piece = possiblePieces.ElementAt(random).Instantiate() as Block;
+				if (piece == null) {
+					continue;
+				}
 				while (MatchAt(i, j, piece.colour))
 				{
 					random = new RandomNumberGenerator().RandiRange(0, possiblePieces.Count - 1);
@@ -322,9 +341,20 @@ public partial class Grid : Node2D
 		grid[col1][row1] = block2;
 		grid[col2][row2] = block1;
 
-		block1.Position = Grid2pixel(col2, row2);
-		block2.Position = Grid2pixel(col1, row1);
+		Vector2 pos1 = Grid2pixel(col2, row2);
+		Vector2 pos2 = Grid2pixel(col1, row1);
 
+		float slideDuration = 0.25f;
+		CreateTween().TweenProperty(block1, "position", pos1, slideDuration)
+			.SetTrans(Tween.TransitionType.Cubic)
+			.SetEase(Tween.EaseType.Out);
+		CreateTween().TweenProperty(block2, "position", pos2, slideDuration)
+			.SetTrans(Tween.TransitionType.Cubic)
+			.SetEase(Tween.EaseType.Out)
+			.Finished += () => OnSwapComplete(col1, row1, col2, row2);
+	}
+
+	private void OnSwapComplete(int col1, int row1, int col2, int row2) {
 		CheckMatches();
 		
 		if (gameMode != GameMode.Endless && gameMode != GameMode.Time60) {

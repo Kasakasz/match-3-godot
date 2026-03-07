@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bhxnot8yo4w7s"]
+[gd_scene load_steps=3 format=3 uid="uid://bhxnot8yo4w7s"]
 
 [ext_resource type="Texture2D" uid="uid://btjg68vgvrqe7" path="res://art/backgroundMenu.jpg" id="1_dwhkn"]
 [ext_resource type="Script" path="res://Scripts/Menu.cs" id="1_x0g1n"]
-[ext_resource type="AudioStream" uid="uid://csnvlm5rfbj31" path="res://music/powerful-energy-upbeat-rock-advertising-music-245728.mp3" id="3_7opmp"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_x0g1n")
@@ -18,78 +17,40 @@ offset_left = 100.0
 offset_top = 80.0
 offset_right = 430.0
 offset_bottom = 150.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
 text = "Match 3 Diamonds"
 horizontal_alignment = 1
 
-[node name="ModeLabel" type="Label" parent="."]
-offset_left = 150.0
-offset_top = 200.0
-offset_right = 380.0
-offset_bottom = 240.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "Select Game Mode"
-horizontal_alignment = 1
-
-[node name="PlayEndless" type="Button" parent="."]
+[node name="PlayButton" type="Button" parent="."]
 offset_left = 138.0
 offset_top = 260.0
 offset_right = 396.0
 offset_bottom = 315.0
-text = "Endless"
+text = "Play"
 
-[node name="PlayMoves10" type="Button" parent="."]
+[node name="HighScoresButton" type="Button" parent="."]
 offset_left = 138.0
 offset_top = 330.0
 offset_right = 396.0
 offset_bottom = 385.0
-text = "10 Moves"
+text = "High Scores"
 
-[node name="PlayMoves20" type="Button" parent="."]
+[node name="SettingsButton" type="Button" parent="."]
 offset_left = 138.0
 offset_top = 400.0
 offset_right = 396.0
 offset_bottom = 455.0
-text = "20 Moves"
-
-[node name="PlayMoves50" type="Button" parent="."]
-offset_left = 138.0
-offset_top = 470.0
-offset_right = 396.0
-offset_bottom = 525.0
-text = "50 Moves"
-
-[node name="PlayTime60" type="Button" parent="."]
-offset_left = 138.0
-offset_top = 540.0
-offset_right = 396.0
-offset_bottom = 595.0
-text = "60 Seconds"
-
-[node name="HighScoresButton" type="Button" parent="."]
-offset_left = 138.0
-offset_top = 610.0
-offset_right = 396.0
-offset_bottom = 665.0
-text = "High Scores"
+text = "Settings"
 
 [node name="ExitButton" type="Button" parent="."]
 offset_left = 137.0
-offset_top = 680.0
+offset_top = 470.0
 offset_right = 395.0
-offset_bottom = 735.0
+offset_bottom = 525.0
 text = "Exit"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_7opmp")
-autoplay = true
-
-[connection signal="pressed" from="PlayEndless" to="." method="PlayEndlessPressed"]
-[connection signal="pressed" from="PlayMoves10" to="." method="PlayMoves10Pressed"]
-[connection signal="pressed" from="PlayMoves20" to="." method="PlayMoves20Pressed"]
-[connection signal="pressed" from="PlayMoves50" to="." method="PlayMoves50Pressed"]
-[connection signal="pressed" from="PlayTime60" to="." method="PlayTime60Pressed"]
+[connection signal="pressed" from="PlayButton" to="." method="PlayButtonPressed"]
 [connection signal="pressed" from="HighScoresButton" to="." method="HighScoresButtonPressed"]
+[connection signal="pressed" from="SettingsButton" to="." method="SettingsButtonPressed"]
 [connection signal="pressed" from="ExitButton" to="." method="QuitButtonPressed"]
