@@ -26,6 +26,9 @@ public partial class Grid : Node2D
 	private Vector2 selectedGridPos;
 	private int score;
 	private int movesLeft;
+	private int movesUsed;
+	private int maxCombo;
+	private int currentCombo;
 	private float timeLeft;
 	private bool gameOver = false;
 	private Label scoreLabel;
@@ -74,6 +77,9 @@ public partial class Grid : Node2D
 	private void InitializeGameMode() {
 		gameOver = false;
 		score = 0;
+		movesUsed = 0;
+		maxCombo = 0;
+		currentCombo = 0;
 		
 		switch (gameMode) {
 			case GameMode.Endless:
@@ -361,8 +367,13 @@ public partial class Grid : Node2D
 	private void OnSwapComplete(int col1, int row1, int col2, int row2) {
 		if (gameOver) return;
 	
+		currentCombo = 0;
 		isAnimating = true;
 		CheckMatches();
+		
+		if (gameMode == GameMode.Endless || gameMode == GameMode.Moves10 || gameMode == GameMode.Moves20 || gameMode == GameMode.Moves50) {
+			movesUsed++;
+		}
 		
 		if (gameMode != GameMode.Endless && gameMode != GameMode.Time60) {
 			if (movesLeft > 0) {
@@ -426,13 +437,17 @@ public partial class Grid : Node2D
 		return groups;
 	}
 
-	private async void CheckMatches() {
+	private void CheckMatches() {
 		if (gameOver) return;
 		
 		List<List<Block>> matchGroups = FindMatchGroups();
 		
 		if (matchGroups.Count > 0) {
 			isAnimating = true;
+			currentCombo++;
+			if (currentCombo > maxCombo) {
+				maxCombo = currentCombo;
+			}
 			int totalScore = 0;
 			foreach (var group in matchGroups) {
 				int groupSize = group.Count;
@@ -578,7 +593,7 @@ public partial class Grid : Node2D
 		
 		HighScoreManager scoreManager = GetNode<HighScoreManager>("/root/HighScoreManager");
 		if (scoreManager != null) {
-			scoreManager.AddScore(gameMode, score);
+			scoreManager.AddScore(gameMode, score, movesUsed, maxCombo);
 		}
 		
 		if (gameOverPanel != null) {
