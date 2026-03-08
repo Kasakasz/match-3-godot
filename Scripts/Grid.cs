@@ -254,8 +254,12 @@ public partial class Grid : Node2D
 		return false;
 	}
 
+	private bool isAnimating = false;
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta) {
+		if (isAnimating) return;
+		
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				MoveDown(i, j);   
@@ -264,9 +268,9 @@ public partial class Grid : Node2D
 	}
 
 	private void MoveDown(int column, int row) {
-		if (row > 0) {
-			Block currentPiece = grid.ElementAt(column).ElementAt(row);
-			Block oneBelow = grid.ElementAt(column).ElementAt(row - 1);
+		if (row < height - 1) {
+			Block currentPiece = grid[column][row];
+			Block oneBelow = grid[column][row + 1];
 			if (oneBelow == null && currentPiece != null) {
 				ProcessGravity(currentPiece, column, row);
 			}
@@ -274,9 +278,9 @@ public partial class Grid : Node2D
 	}
 
 	private void ProcessGravity(Block piece, int column, int row) {
-		piece.Position = Grid2pixel(column, row - 1);
-		grid.ElementAt(column).RemoveAt(row);
-		grid.ElementAt(column).Insert(row - 1, piece);
+		piece.Position = Grid2pixel(column, row + 1);
+		grid[column][row] = null;
+		grid[column][row + 1] = piece;
 	}
 
 	private void RespawnBlock(int column) {
@@ -355,6 +359,9 @@ public partial class Grid : Node2D
 	}
 
 	private void OnSwapComplete(int col1, int row1, int col2, int row2) {
+		if (gameOver) return;
+	
+		isAnimating = true;
 		CheckMatches();
 		
 		if (gameMode != GameMode.Endless && gameMode != GameMode.Time60) {
@@ -419,10 +426,13 @@ public partial class Grid : Node2D
 		return groups;
 	}
 
-	private void CheckMatches() {
+	private async void CheckMatches() {
+		if (gameOver) return;
+		
 		List<List<Block>> matchGroups = FindMatchGroups();
 		
 		if (matchGroups.Count > 0) {
+			isAnimating = true;
 			int totalScore = 0;
 			foreach (var group in matchGroups) {
 				int groupSize = group.Count;
@@ -459,9 +469,15 @@ public partial class Grid : Node2D
 				}
 			}
 
-			GetTree().CreateTimer(explosionDuration);
-			CallDeferred(nameof(ContinueAfterExplosion));
+			float maxFallDistance = offset * height;
+			float fallDuration = maxFallDistance / 400f;
+			ApplyGravity();
+			FillEmptySpaces();
+			
+			CallDeferred(nameof(CheckMatches));
 			return;
+		} else {
+			isAnimating = false;
 		}
 	}
 
@@ -495,32 +511,29 @@ public partial class Grid : Node2D
 	}
 
 	private void ContinueAfterExplosion() {
-		float fallDuration = 0.5f;
 		ApplyGravity();
 		FillEmptySpaces();
-		GetTree().CreateTimer(fallDuration);
 		CallDeferred(nameof(CheckMatches));
 	}
 
 	private void ApplyGravity() {
 		for (int col = 0; col < width; col++) {
+			int emptySpaces = 0;
 			for (int row = 0; row < height; row++) {
 				if (grid[col][row] == null) {
-					for (int above = row + 1; above < height; above++) {
-						if (grid[col][above] != null) {
-							grid[col][row] = grid[col][above];
-							grid[col][above] = null;
-							
-							Vector2 targetPos = Grid2pixel(col, row);
-							float fallDistance = Mathf.Abs(grid[col][row].Position.Y - targetPos.Y);
-							float fallDuration = fallDistance / 400f;
-							
-							CreateTween().TweenProperty(grid[col][row], "position", targetPos, fallDuration)
-								.SetTrans(Tween.TransitionType.Expo)
-								.SetEase(Tween.EaseType.In);
-							break;
-						}
-					}
+					emptySpaces++;
+				} else if (emptySpaces > 0) {
+					int newRow = row - emptySpaces;
+					grid[col][newRow] = grid[col][row];
+					grid[col][row] = null;
+					
+					Vector2 targetPos = Grid2pixel(col, newRow);
+					float fallDistance = Mathf.Abs(grid[col][newRow].Position.Y - targetPos.Y);
+					float fallDuration = fallDistance / 800f;
+					
+					CreateTween().TweenProperty(grid[col][newRow], "position", targetPos, fallDuration)
+						.SetTrans(Tween.TransitionType.Expo)
+						.SetEase(Tween.EaseType.In);
 				}
 			}
 		}
@@ -528,23 +541,29 @@ public partial class Grid : Node2D
 
 	private void FillEmptySpaces() {
 		for (int col = 0; col < width; col++) {
+			int emptyCount = 0;
 			for (int row = 0; row < height; row++) {
 				if (grid[col][row] == null) {
-					int random = new RandomNumberGenerator().RandiRange(0, possiblePieces.Count - 1);
-					Block piece = possiblePieces[random].Instantiate() as Block;
-					AddChild(piece);
-					
-					Vector2 targetPos = Grid2pixel(col, row);
-					piece.Position = new Vector2(targetPos.X, targetPos.Y - offset * height);
-					grid[col][row] = piece;
-					
-					float fallDistance = targetPos.Y - piece.Position.Y;
-					float fallDuration = fallDistance / 400f;
-					
-					CreateTween().TweenProperty(piece, "position", targetPos, fallDuration)
-						.SetTrans(Tween.TransitionType.Expo)
-						.SetEase(Tween.EaseType.In);
+					emptyCount++;
 				}
+			}
+			
+			for (int i = 0; i < emptyCount; i++) {
+				int spawnRow = height - 1 - i;
+				int random = new RandomNumberGenerator().RandiRange(0, possiblePieces.Count - 1);
+				Block piece = possiblePieces[random].Instantiate() as Block;
+				AddChild(piece);
+				
+				Vector2 targetPos = Grid2pixel(col, spawnRow);
+				piece.Position = new Vector2(targetPos.X, targetPos.Y - offset * height);
+				grid[col][spawnRow] = piece;
+				
+				float fallDistance = targetPos.Y - piece.Position.Y;
+				float fallDuration = fallDistance / 800f;
+				
+				CreateTween().TweenProperty(piece, "position", targetPos, fallDuration)
+					.SetTrans(Tween.TransitionType.Expo)
+					.SetEase(Tween.EaseType.In);
 			}
 		}
 	}
