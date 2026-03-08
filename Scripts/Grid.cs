@@ -371,9 +371,7 @@ public partial class Grid : Node2D
 		isAnimating = true;
 		CheckMatches();
 		
-		if (gameMode == GameMode.Endless || gameMode == GameMode.Moves10 || gameMode == GameMode.Moves20 || gameMode == GameMode.Moves50) {
-			movesUsed++;
-		}
+		movesUsed++;
 		
 		if (gameMode != GameMode.Endless && gameMode != GameMode.Time60) {
 			if (movesLeft > 0) {
